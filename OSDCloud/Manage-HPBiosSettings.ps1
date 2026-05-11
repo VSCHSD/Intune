@@ -150,10 +150,10 @@ Function Stop-Script
         [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()][String]$ErrorMessage,
         [Parameter(Mandatory=$false)][ValidateNotNullOrEmpty()][String]$Exception
     )
-    Write-LogEntry -Value $ErrorMessage -Severity 3
+    #Write-LogEntry -Value $ErrorMessage -Severity 3
     if($Exception)
     {
-        Write-LogEntry -Value "Exception Message: $Exception" -Severity 3
+        #Write-LogEntry -Value "Exception Message: $Exception" -Severity 3
     }
     throw $ErrorMessage
 }
@@ -174,12 +174,12 @@ Function Get-WmiData
         {
             if($Select)
             {
-				Write-LogEntry -Value "Get the $Classname WMI class from the $Namespace namespace and select properties: $Select" -Severity 1
+				#Write-LogEntry -Value "Get the $Classname WMI class from the $Namespace namespace and select properties: $Select" -Severity 1
                 $Query = Get-CimInstance -Namespace $Namespace -ClassName $ClassName -ErrorAction Stop | Select-Object $Select -ErrorAction Stop
             }
             else
             {
-				Write-LogEntry -Value "Get the $ClassName WMI class from the $Namespace namespace" -Severity 1
+				#Write-LogEntry -Value "Get the $ClassName WMI class from the $Namespace namespace" -Severity 1
                 $Query = Get-CimInstance -Namespace $Namespace -ClassName $ClassName -ErrorAction Stop
             }
         }
@@ -187,12 +187,12 @@ Function Get-WmiData
         {
             if($Select)
             {
-				Write-LogEntry -Value "Get the $Classname WMI class from the $Namespace namespace and select properties: $Select" -Severity 1
+				#Write-LogEntry -Value "Get the $Classname WMI class from the $Namespace namespace and select properties: $Select" -Severity 1
                 $Query = Get-WmiObject -Namespace $Namespace -Class $ClassName -ErrorAction Stop | Select-Object $Select -ErrorAction Stop
             }
             else
             {
-				Write-LogEntry -Value "Get the $ClassName WMI class from the $Namespace namespace" -Severity 1
+				#Write-LogEntry -Value "Get the $ClassName WMI class from the $Namespace namespace" -Severity 1
                 $Query = Get-WmiObject -Namespace $Namespace -Class $ClassName -ErrorAction Stop
             }
         }
@@ -208,7 +208,7 @@ Function Get-WmiData
 			Stop-Script -ErrorMessage "An error occurred while connecting to the $Classname WMI class in the $Namespace namespace" -Exception $PSItem.Exception.Message	
 		}
 	}
-	Write-LogEntry -Value "Successfully connected to the $ClassName WMI class" -Severity 1
+	#Write-LogEntry -Value "Successfully connected to the $ClassName WMI class" -Severity 1
 	return $Query
 }
 
@@ -236,13 +236,13 @@ Function Set-HPBiosSetting {
     # Authoritative existence check: HP_BIOSSetting (not HP_BIOSEnumeration)
     $settingObj = $HPBiosSetting | Where-Object { $_.Name -eq $Name } | Select-Object -First 1
     if (-not $settingObj) {
-        Write-LogEntry -Value "Setting ""$Name"" not found in HP_BIOSSetting (name mismatch or not supported)" -Severity 2
+        #Write-LogEntry -Value "Setting ""$Name"" not found in HP_BIOSSetting (name mismatch or not supported)" -Severity 2
         $Script:NotFound++
         return
     }
 
     if ($settingObj.IsReadOnly -eq 1 -or $settingObj.IsReadOnly -eq $true) {
-        Write-LogEntry -Value "Setting ""$Name"" is read-only" -Severity 2
+        #Write-LogEntry -Value "Setting ""$Name"" is read-only" -Severity 2
         $Script:FailSet++
         return
     }
@@ -256,7 +256,7 @@ Function Set-HPBiosSetting {
     }
 
     if ($null -ne $currentValue -and $currentValue -eq $Value.Trim()) {
-        Write-LogEntry -Value "Setting ""$Name"" is already set to ""$Value""" -Severity 1
+        #Write-LogEntry -Value "Setting ""$Name"" is already set to ""$Value""" -Severity 1
         $Script:AlreadySet++
         return
     }
@@ -269,7 +269,7 @@ Function Set-HPBiosSetting {
         # Typical format: Disable,*Enable or No,Change Only,*Change or Delete
         $allowed = $raw.Split(',') | ForEach-Object { $_.Trim().TrimStart('*') } | Where-Object { $_ }
         if ($allowed -and ($allowed -notcontains $Value)) {
-            Write-LogEntry -Value "Value ""$Value"" is not valid for ""$Name"". Allowed: $($allowed -join ' | ')" -Severity 2
+            #Write-LogEntry -Value "Value ""$Value"" is not valid for ""$Name"". Allowed: $($allowed -join ' | ')" -Severity 2
             $Script:FailSet++
             return
         }
@@ -283,15 +283,15 @@ Function Set-HPBiosSetting {
     }
 
     if ($rc -eq 0) {
-        Write-LogEntry -Value "Successfully set ""$Name"" to ""$Value""" -Severity 1
+        #Write-LogEntry -Value "Successfully set ""$Name"" to ""$Value""" -Severity 1
         $Script:SuccessSet++
     } else {
-        Write-LogEntry -Value "Failed to set ""$Name"" to ""$Value"". Return code $rc" -Severity 3
+        #Write-LogEntry -Value "Failed to set ""$Name"" to ""$Value"". Return code $rc" -Severity 3
         $Script:FailSet++
     }
 }
 
-Function Write-LogEntry
+Function #Write-LogEntry
 {
     #Write data to a CMTrace compatible log file. (Credit to SCConfigMgr - https://www.scconfigmgr.com/)
 
@@ -371,7 +371,7 @@ else
 	}
 }
 Write-Output "Log path set to $LogFile"
-Write-LogEntry -Value "START - HP BIOS settings management script" -Severity 1
+#Write-LogEntry -Value "START - HP BIOS settings management script" -Severity 1
 
 #Check if manufacturer is HP
 $MfrCheck = gwmi win32_bios
@@ -379,12 +379,12 @@ $MfrCheck | select PSComputername, Description, BiosVersion, BuildNumber, Manufa
 If (($MfrCheck.Manufacturer -eq 'HP') -or ($MfrCheck.Manufacturer -eq 'Hewlett-Packard')) 
 { 
 Write-Output "Manufacturer is HP, continuing script"
-#Write-LogEntry -Value "Manufacturer is HP, continuing script" -Severity 1
+##Write-LogEntry -Value "Manufacturer is HP, continuing script" -Severity 1
 }
 else
 {
 Write-Output "Manufacturer is not HP, exiting"
-#Write-LogEntry -Value "Manufacturer is not HP, exiting" -Severity 1
+##Write-LogEntry -Value "Manufacturer is not HP, exiting" -Severity 1
 exit 0
 }
 
@@ -398,20 +398,20 @@ $Interface = Get-WmiData -Namespace root\hp\InstrumentedBIOS -ClassName HP_BIOSS
 $HPBiosSetting = Get-WmiData -Namespace root\hp\InstrumentedBIOS -ClassName HP_BIOSSetting -CmdletType WMI
 
 #Get the current password status
-Write-LogEntry -Value "Get the current password state" -Severity 1
+#Write-LogEntry -Value "Get the current password state" -Severity 1
 
 $SetupPasswordCheck = ($HPBiosSetting | Where-Object Name -eq "Setup Password").IsSet
 if($SetupPasswordCheck -eq 1)
 {
-	Write-LogEntry -Value "The setup password is currently set" -Severity 1
+	#Write-LogEntry -Value "The setup password is currently set" -Severity 1
 }
 else
 {
-	Write-LogEntry -Value "The setup password is not currently set" -Severity 1
+	#Write-LogEntry -Value "The setup password is not currently set" -Severity 1
 }
 
 #Parameter validation
-Write-LogEntry -Value "Begin parameter validation" -Severity 1
+#Write-LogEntry -Value "Begin parameter validation" -Severity 1
 if($GetSettings -and $SetSettings)
 {
     Stop-Script -ErrorMessage "Cannot specify the GetSettings and SetSettings parameters at the same time"
@@ -424,7 +424,7 @@ if($SetSettings -and !($Settings -or $CsvPath))
 {
     Stop-Script -ErrorMessage "Settings must be specified using either the Settings variable in the script or the CsvPath parameter"
 }
-Write-LogEntry -Value "Parameter validation completed" -Severity 1
+#Write-LogEntry -Value "Parameter validation completed" -Severity 1
 
 #Set counters to 0
 if($SetSettings)
@@ -438,7 +438,7 @@ if($SetSettings)
 #Get the current password status
 if($SetSettings)
 {
-    Write-LogEntry -Value "Check current BIOS setup password status" -Severity 1
+    #Write-LogEntry -Value "Check current BIOS setup password status" -Severity 1
     $PasswordCheck = ($HPBiosSetting | Where-Object Name -eq "Setup Password").IsSet
     if($PasswordCheck -eq 1)
     {
@@ -450,7 +450,7 @@ if($SetSettings)
         #Setup password set correctly
         if(($Interface.SetBIOSSetting("Setup Password","<utf-16/>" + $SetupPassword,"<utf-16/>" + $SetupPassword)).Return -eq 0)
 	    {
-		    Write-LogEntry -Value "The specified setup password matches the currently set password" -Severity 1
+		    #Write-LogEntry -Value "The specified setup password matches the currently set password" -Severity 1
         }
         #Setup password not set correctly
         else
@@ -460,7 +460,7 @@ if($SetSettings)
     }
     else
     {
-        Write-LogEntry -Value "The BIOS setup password is not currently set" -Severity 1
+        #Write-LogEntry -Value "The BIOS setup password is not currently set" -Severity 1
         $BIOS = Get-WmiObject -Namespace root/hp/InstrumentedBIOS -Class HP_BIOSSettingInterface
         $BIOS.SetBIOSSetting('Setup Password',"<utf-16/>" + $SetupPassword,"<utf-16/>")
     }
@@ -550,13 +550,13 @@ if($SetSettings)
 if($SetSettings)
 {
     Write-Output "$AlreadySet settings already set correctly"
-    Write-LogEntry -Value "$AlreadySet settings already set correctly" -Severity 1
+    #Write-LogEntry -Value "$AlreadySet settings already set correctly" -Severity 1
     Write-Output "$SuccessSet settings successfully set"
-    Write-LogEntry -Value "$SuccessSet settings successfully set" -Severity 1
+    #Write-LogEntry -Value "$SuccessSet settings successfully set" -Severity 1
     Write-Output "$FailSet settings failed to set"
-    Write-LogEntry -Value "$FailSet settings failed to set" -Severity 3
+    #Write-LogEntry -Value "$FailSet settings failed to set" -Severity 3
     Write-Output "$NotFound settings not found"
-    Write-LogEntry -Value "$NotFound settings not found" -Severity 2
+    #Write-LogEntry -Value "$NotFound settings not found" -Severity 2
 }
 Write-Output "HP BIOS settings Management completed. Check the log file for more information"
-Write-LogEntry -Value "END - HP BIOS settings management script" -Severity 1
+#Write-LogEntry -Value "END - HP BIOS settings management script" -Severity 1

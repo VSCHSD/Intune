@@ -166,12 +166,12 @@ Function New-DellBiosPassword
 
 		if(($SecurityInterface.SetNewPassword(1,$AdminBytes.Length,$AdminBytes,$PasswordType,$AdminPW,$Password)).Status -eq 0)
 		{
-			Write-LogEntry -Value "The $PasswordType password has been successfully set" -Severity 1
+			#Write-LogEntry -Value "The $PasswordType password has been successfully set" -Severity 1
 		}
 		else
 		{
 			Set-Variable -Name "$($PasswordType)PWExists" -Value "Failed" -Scope Script
-			Write-LogEntry -Value "Failed to set the $PasswordType password" -Severity 3
+			#Write-LogEntry -Value "Failed to set the $PasswordType password" -Severity 3
 		}
 	}
 	#Attempt to set the admin or system password
@@ -179,12 +179,12 @@ Function New-DellBiosPassword
 	{
 		if(($SecurityInterface.SetNewPassword(0,0,0,$PasswordType,"",$Password)).Status -eq 0)
 		{
-			Write-LogEntry -Value "The $PasswordType password has been successfully set" -Severity 1
+			#Write-LogEntry -Value "The $PasswordType password has been successfully set" -Severity 1
 		}
 		else
 		{
 			Set-Variable -Name "$($PasswordType)PWExists" -Value "Failed" -Scope Script
-			Write-LogEntry -Value "Failed to set the $PasswordType password" -Severity 3
+			#Write-LogEntry -Value "Failed to set the $PasswordType password" -Severity 3
 		}
 	}
 }
@@ -198,10 +198,10 @@ Function Stop-Script
         [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()][String]$ErrorMessage,
         [Parameter(Mandatory=$false)][ValidateNotNullOrEmpty()][String]$Exception
     )
-    Write-LogEntry -Value $ErrorMessage -Severity 3
+    #Write-LogEntry -Value $ErrorMessage -Severity 3
     if($Exception)
     {
-        Write-LogEntry -Value "Exception Message: $Exception" -Severity 3
+        #Write-LogEntry -Value "Exception Message: $Exception" -Severity 3
     }
     throw $ErrorMessage
 }
@@ -223,12 +223,12 @@ Function Get-WmiData
        	{
            	if($Select)
            	{
-				Write-LogEntry -Value "Get the $Classname WMI class from the $Namespace namespace and select properties: $Select" -Severity 1
+				#Write-LogEntry -Value "Get the $Classname WMI class from the $Namespace namespace and select properties: $Select" -Severity 1
                	$Query = Get-CimInstance -Namespace $Namespace -ClassName $ClassName -ErrorAction SilentlyContinue | Select-Object $Select -ErrorAction SilentlyContinue
            	}
            	else
            	{
-				Write-LogEntry -Value "Get the $ClassName WMI class from the $Namespace namespace" -Severity 1
+				#Write-LogEntry -Value "Get the $ClassName WMI class from the $Namespace namespace" -Severity 1
                	$Query = Get-CimInstance -Namespace $Namespace -ClassName $ClassName -ErrorAction SilentlyContinue
            	}
        	}
@@ -236,12 +236,12 @@ Function Get-WmiData
        	{
            	if($Select)
            	{
-				Write-LogEntry -Value "Get the $Classname WMI class from the $Namespace namespace and select properties: $Select" -Severity 1
+				#Write-LogEntry -Value "Get the $Classname WMI class from the $Namespace namespace and select properties: $Select" -Severity 1
                	$Query = Get-WmiObject -Namespace $Namespace -Class $ClassName -ErrorAction SilentlyContinue | Select-Object $Select -ErrorAction SilentlyContinue
            	}
            	else
            	{
-				Write-LogEntry -Value "Get the $ClassName WMI class from the $Namespace namespace" -Severity 1
+				#Write-LogEntry -Value "Get the $ClassName WMI class from the $Namespace namespace" -Severity 1
                	$Query = Get-WmiObject -Namespace $Namespace -Class $ClassName -ErrorAction SilentlyContinue
 			}
 		}
@@ -249,11 +249,11 @@ Function Get-WmiData
 		{
 			if($Select)
 			{
-				Write-LogEntry -Value "An error occurred while attempting to get the $Select properties from the $Classname WMI class in the $Namespace namespace. Retry in 30 seconds" -Severity 2
+				#Write-LogEntry -Value "An error occurred while attempting to get the $Select properties from the $Classname WMI class in the $Namespace namespace. Retry in 30 seconds" -Severity 2
 			}
 			else
 			{
-				Write-LogEntry -Value "An error occurred while connecting to the $Classname WMI class in the $Namespace namespace. Retry in 30 seconds" -Severity 2
+				#Write-LogEntry -Value "An error occurred while connecting to the $Classname WMI class in the $Namespace namespace. Retry in 30 seconds" -Severity 2
 			}
 			Start-Sleep -Seconds 30
 			$Counter++
@@ -274,7 +274,7 @@ Function Get-WmiData
 			Stop-Script -ErrorMessage "An error occurred while connecting to the $Classname WMI class in the $Namespace namespace"
 		}
 	}
-	Write-LogEntry -Value "Successfully connected to the $ClassName WMI class" -Severity 1
+	#Write-LogEntry -Value "Successfully connected to the $ClassName WMI class" -Severity 1
 	return $Query
 }
 
@@ -297,7 +297,7 @@ Function Set-DellBiosSetting
 
         if($CurrentValue -eq $NewBootOrder)
         {
-                Write-LogEntry -Value "The ""$BootMode"" boot order is already set to ""$NewBootOrder""" -Severity 1
+                #Write-LogEntry -Value "The ""$BootMode"" boot order is already set to ""$NewBootOrder""" -Severity 1
                 $Script:AlreadySet++
         }
         else
@@ -312,12 +312,12 @@ Function Set-DellBiosSetting
             }
             if($SettingResult -eq 0)
             {
-                Write-LogEntry -Value "Successfully set the ""$BootMode"" boot order to ""$NewBootOrder""" -Severity 1
+                #Write-LogEntry -Value "Successfully set the ""$BootMode"" boot order to ""$NewBootOrder""" -Severity 1
                 $Script:SuccessSet++
             }
             else
             {
-                Write-LogEntry -Value "Failed to set the ""$BootMode"" boot order to ""$NewBootOrder"". Return code: $SettingResult" -Severity 3
+                #Write-LogEntry -Value "Failed to set the ""$BootMode"" boot order to ""$NewBootOrder"". Return code: $SettingResult" -Severity 3
                 $Script:FailSet++
             }
         }
@@ -335,12 +335,12 @@ Function Set-DellBiosSetting
         }
         if($SettingResult -eq 0)
         {
-            Write-LogEntry -Value "Successfully loaded default BIOS settings" -Severity 1
+            #Write-LogEntry -Value "Successfully loaded default BIOS settings" -Severity 1
             $Script:DefaultSet = $True
         }
         else
         {
-            Write-LogEntry -Value "Failed to load default BIOS settings. Return code: $SettingResult" -Severity 3
+            #Write-LogEntry -Value "Failed to load default BIOS settings. Return code: $SettingResult" -Severity 3
             $Script:DefaultSet = $False
         }
     }
@@ -354,7 +354,7 @@ Function Set-DellBiosSetting
             #Setting is already set to specified value
             if($CurrentValue -eq $Value)
             {
-                Write-LogEntry -Value "Setting ""$Name"" is already set to ""$Value""" -Severity 1
+                #Write-LogEntry -Value "Setting ""$Name"" is already set to ""$Value""" -Severity 1
                 $Script:AlreadySet++
             }
             #Setting is not set to specified value
@@ -371,12 +371,12 @@ Function Set-DellBiosSetting
             
                 if($SettingResult -eq 0)
                 {
-                    Write-LogEntry -Value "Successfully set ""$Name"" to ""$Value""" -Severity 1
+                    #Write-LogEntry -Value "Successfully set ""$Name"" to ""$Value""" -Severity 1
                     $Script:SuccessSet++
                 }
                 else
                 {
-                    Write-LogEntry -Value "Failed to set ""$Name"" to ""$Value"". Return code: $SettingResult" -Severity 3
+                    #Write-LogEntry -Value "Failed to set ""$Name"" to ""$Value"". Return code: $SettingResult" -Severity 3
                     $Script:FailSet++
                 }
             }
@@ -384,13 +384,13 @@ Function Set-DellBiosSetting
         #Setting not found
         else
         {
-            Write-LogEntry -Value "Setting ""$Name"" not found" -Severity 2
+            #Write-LogEntry -Value "Setting ""$Name"" not found" -Severity 2
             $Script:NotFound++
         }
     }
 }
 
-Function Write-LogEntry
+Function #Write-LogEntry
 {
 #Write data to a CMTrace compatible log file. (Credit to SCConfigMgr - https://www.scconfigmgr.com/)
 
@@ -476,10 +476,10 @@ else
 	}
 }
 Write-Output "Log path set to $LogFile"
-Write-LogEntry -Value "START - Dell BIOS settings management script" -Severity 1
+#Write-LogEntry -Value "START - Dell BIOS settings management script" -Severity 1
 
 #Parameter validation
-Write-LogEntry -Value "Begin parameter validation" -Severity 1
+#Write-LogEntry -Value "Begin parameter validation" -Severity 1
 if($GetSettings -and ($SetSettings -or $SetBootOrder -or $SetDefaults))
 {
     Stop-Script -ErrorMessage "Cannot specify the GetSettings and SetSettings or SetBootOrder or SetDefaults parameters at the same time"
@@ -499,19 +499,19 @@ if($SetBootOrder -and !($BootMode))
 if($SetSettings -and $SetDefaults)
 {
 	$ErrorMsg = "Both the SetSettings and SetDefaults parameters have been used. The SetDefaults parameter will override any other settings"
-    Write-LogEntry -Value $ErrorMsg -Severity 2
+    #Write-LogEntry -Value $ErrorMsg -Severity 2
 }
 if($SetBootOrder -and $SetDefaults)
 {
 	$ErrorMsg = "Both the SetBootOrder and SetDefaults parameters have been used. The SetDefaults parameter will override any other settings"
-    Write-LogEntry -Value $ErrorMsg -Severity 2
+    #Write-LogEntry -Value $ErrorMsg -Severity 2
 }
 if(($SetBootOrder -or $SetDefaults) -and $CsvPath -and !($SetSettings))
 {
 	$ErrorMsg = "The CsvPath parameter has been specified without the SetSettings paramter. The CSV file will be ignored"
-    Write-LogEntry -Value $ErrorMsg -Severity 2
+    #Write-LogEntry -Value $ErrorMsg -Severity 2
 }
-Write-LogEntry -Value "Parameter validation completed" -Severity 1
+#Write-LogEntry -Value "Parameter validation completed" -Severity 1
 
 #Connect to the BIOSAttributeInterface WMI class
 $AttributeInterface = Get-WmiData -Namespace root\dcim\sysman\biosattributes -ClassName BIOSAttributeInterface -CmdletType WMI
@@ -583,11 +583,11 @@ if($SetSettings -or $SetBootOrder)
 #Get the current password status
 if($SetSettings -or $SetDefaults -or $SetBootOrder)
 {
-    Write-LogEntry -Value "Get the current password state" -Severity 1
+    #Write-LogEntry -Value "Get the current password state" -Severity 1
     $AdminPasswordCheck = Get-CimInstance -Namespace root/dcim/sysman/wmisecurity -ClassName PasswordObject | Where-Object NameId -EQ "Admin" | Select-Object -ExpandProperty IsPasswordSet
     if($AdminPasswordCheck -eq 1)
     {
-        Write-LogEntry -Value "The admin password is currently set" -Severity 1
+        #Write-LogEntry -Value "The admin password is currently set" -Severity 1
         #Admin password set but parameter not specified
         if([String]::IsNullOrEmpty($AdminPassword))
         {
@@ -596,7 +596,7 @@ if($SetSettings -or $SetDefaults -or $SetBootOrder)
         #Admin password set correctly
         if(($SecurityInterface.SetNewPassword(1,$Bytes.Length,$Bytes,"Admin",$AdminPassword,$AdminPassword)).Status -eq 0)
 	    {
-		    Write-LogEntry -Value "The specified admin password matches the currently set password" -Severity 1
+		    #Write-LogEntry -Value "The specified admin password matches the currently set password" -Severity 1
         }
         #Supervisor password not set correctly
         else
@@ -606,7 +606,7 @@ if($SetSettings -or $SetDefaults -or $SetBootOrder)
     }
     else
     {
-        Write-LogEntry -Value "The admin password is not currently set. Setting" -Severity 1
+        #Write-LogEntry -Value "The admin password is not currently set. Setting" -Severity 1
         New-DellBiosPassword -PasswordType Admin -Password $AdminPassword
     }
 }
@@ -614,10 +614,10 @@ if($SetSettings -or $SetDefaults -or $SetBootOrder)
 #Get the current settings
 if($GetSettings)
 {
-    Write-LogEntry -Value "Getting a list of current BIOS settings" -Severity 1
+    #Write-LogEntry -Value "Getting a list of current BIOS settings" -Severity 1
     #Write the current boot order to the log file
     $BootListObject = $BootOrder | Where-Object IsActive -eq  1 | Select-Object BootListType,BootOrder
-    Write-LogEntry -Value "The current boot order is: $($BootListObject.BootOrder)" -Severity 1
+    #Write-LogEntry -Value "The current boot order is: $($BootListObject.BootOrder)" -Severity 1
     #Get all other settings
     $SettingObject = foreach($Setting in $SettingList){
         $PossibleValue = [String]$Setting.PossibleValue
@@ -629,7 +629,7 @@ if($GetSettings)
     }
     if($CsvPath)
     {
-        Write-LogEntry -Value "Exporting settings to $CsvPath" -Severity 1
+        #Write-LogEntry -Value "Exporting settings to $CsvPath" -Severity 1
         $SettingObject | Export-Csv -Path $CsvPath -NoTypeInformation
         (Get-Content $CsvPath) | ForEach-Object {$_ -Replace '"',""} | Out-File $CsvPath -Force -Encoding ascii
     }
@@ -715,13 +715,13 @@ if($SetSettings -or $SetDefaults -or $SetBootOrder)
 if($SetSettings -or $SetBootOrder)
 {
     Write-Output "$AlreadySet settings already set correctly"
-    Write-LogEntry -Value "$AlreadySet settings already set correctly" -Severity 1
+    #Write-LogEntry -Value "$AlreadySet settings already set correctly" -Severity 1
     Write-Output "$SuccessSet settings successfully set"
-    Write-LogEntry -Value "$SuccessSet settings successfully set" -Severity 1
+    #Write-LogEntry -Value "$SuccessSet settings successfully set" -Severity 1
     Write-Output "$FailSet settings failed to set"
-    Write-LogEntry -Value "$FailSet settings failed to set" -Severity 3
+    #Write-LogEntry -Value "$FailSet settings failed to set" -Severity 3
     Write-Output "$NotFound settings not found"
-    Write-LogEntry -Value "$NotFound settings not found" -Severity 2
+    #Write-LogEntry -Value "$NotFound settings not found" -Severity 2
 }
 if($SetDefaults)
 {
@@ -735,4 +735,4 @@ if($SetDefaults)
     }
 }
 Write-Output "Dell BIOS settings Management completed. Check the log file for more information"
-Write-LogEntry -Value "END - Dell BIOS settings management script" -Severity 1
+#Write-LogEntry -Value "END - Dell BIOS settings management script" -Severity 1
