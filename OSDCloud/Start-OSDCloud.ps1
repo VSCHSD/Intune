@@ -34,7 +34,6 @@ $Global:MyOSDCloud = [ordered]@{
 $OSDModuleResource.StartOSDCloudGUI = @{
     BrandName   = 'Valley Stream Central High School District'
 
-    $OSName = 'Windows 11 25H2 x64'
     $OSEdition = 'Pro'
     $OSActivation = 'Retail'
     $OSLanguage = 'en-us'
