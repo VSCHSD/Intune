@@ -18,9 +18,10 @@ $Global:MyOSDCloud = [ordered]@{
 $OSDModuleResource.StartOSDCloudGUI = @{
     BrandName   = 'Valley Stream Central High School District'
 
-    OSEdition = 'Pro'
-    OSActivation = 'Retail'
-    OSLanguage = 'en-us'
+    OSName = $OSName
+    OSEdition = $OSEdition
+    OSActivation = $OSActivation
+    OSLanguage = $OSLanguage
 
     ClearDiskConfirm       = $false
     restartComputer        = $true
