@@ -4,33 +4,17 @@ $OSEdition = 'Pro'
 $OSActivation = 'Retail'
 $OSLanguage = 'en-us'
 
-#Set OSDCloud Vars
+#Set OSDCloudCLI Variables
 $Global:MyOSDCloud = [ordered]@{
-    Restart = [bool]$true
-    MSCatalogFirmware = [bool]$true
-    MSCatalogDiskDrivers = [bool]$true
-    MSCatalogNetDrivers = [bool]$true
-    MSCatalogScsiDrivers = [bool]$true
-    RecoveryPartition = [bool]$true
-    OEMActivation = [bool]$true
-    WindowsUpdate = [bool]$true
-    WindowsUpdateDrivers = [bool]$true
-    WindowsDefenderUpdate = [bool]$true
-    SetTimeZone = [bool]$true
-    ClearDiskConfirm = [bool]$false
-    ShutdownSetupComplete = [bool]$false
-    SyncMSUpCatDriverUSB = [bool]$true
-    CheckSHA1 = [bool]$true
-    ZTI = [bool]$true
-    updateDiskDrivers = [bool]$true
-    updateFirmware = [bool]$true
-    updateNetworkDrivers = [bool]$true
-    updateSCSIDrivers = [bool]$true
-    #OSNames = @('Windows 11 25H2 x64', 'Windows 11 24H2 x64')
-    #OSVersionNames = @('Windows 11')
-    BrandName = 'Valley Stream Central High School District'
+        MSCatalogFirmware = [bool]$true
+        MSCatalogDiskDrivers = [bool]$true
+        MSCatalogNetDrivers = [bool]$true
+        MSCatalogScsiDrivers = [bool]$true
+        Restart = [bool]$true
+        ZTI = [bool]$true
 }
-#Set OSDCloudGUI Vars
+
+#Set OSDCloudGUI Variables
 $OSDModuleResource.StartOSDCloudGUI = @{
     BrandName   = 'Valley Stream Central High School District'
 
