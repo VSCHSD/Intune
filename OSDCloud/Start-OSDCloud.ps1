@@ -18,10 +18,6 @@ $Global:MyOSDCloud = [ordered]@{
 $OSDModuleResource.StartOSDCloudGUI = @{
     BrandName   = 'Valley Stream Central High School District'
 
-    OSEdition = $OSEdition
-    OSActivation = $OSActivation
-    OSLanguage = $OSLanguage
-
     ClearDiskConfirm       = $false
     restartComputer        = $true
     captureScreenshots     = $false
@@ -50,30 +46,48 @@ if ($Manufacturer -match 'HP|Hewlett') {
 }
 
 
-do {
+$TimeoutSeconds = 10
+$Choice = $null
 
-    Write-Host ""
-    Write-Host "===== OSDCloudCLI Configuration =====" -ForegroundColor Cyan
-    Write-Host "OS Name       : $OSName"
-    Write-Host "OS Edition    : $OSEdition"
-    Write-Host "Activation    : $OSActivation"
-    Write-Host "Language      : $OSLanguage"
-    Write-Host "==================================" -ForegroundColor Cyan
-    Write-Host ""
+Write-Host ""
+Write-Host "===== OSDCloudCLI Configuration =====" -ForegroundColor Cyan
+Write-Host "OS Name       : $OSName"
+Write-Host "OS Edition    : $OSEdition"
+Write-Host "Activation    : $OSActivation"
+Write-Host "Language      : $OSLanguage"
+Write-Host "==================================" -ForegroundColor Cyan
+Write-Host ""
 
-    Write-Host "Select OSDCloud startup mode:" -ForegroundColor Cyan
-    Write-Host "1. Start OSDCloudCLI Unattended (With the options above)"
-    Write-Host "2. Start OSDCloudGUI (To pick others)"
-    Write-Host ""
+Write-Host "Select OSDCloud startup mode:" -ForegroundColor Cyan
+Write-Host "1. Start OSDCloudCLI Unattended (With the options above)"
+Write-Host "2. Start OSDCloudGUI (To pick others)"
+Write-Host ""
 
+for ($i = $TimeoutSeconds; $i -ge 1; $i--) {
+    Write-Host -NoNewline "`rDefaulting to option 1 in $i seconds... Press 1, 2, or Enter " -ForegroundColor Yellow
 
-    $Choice = Read-Host "Enter selection (1 or 2)"
+    if ([Console]::KeyAvailable) {
+        $key = [Console]::ReadKey($true)
 
-    if ($Choice -notin '1','2') {
-        Write-Host "Invalid selection. Please enter 1 or 2." -ForegroundColor Yellow
+        switch ($key.Key) {
+            'D1' { $Choice = '1'; break }
+            'NumPad1' { $Choice = '1'; break }
+            'D2' { $Choice = '2'; break }
+            'NumPad2' { $Choice = '2'; break }
+            'Enter' { $Choice = '1'; break }
+        }
     }
 
-} until ($Choice -in '1','2')
+    if ($Choice) { break }
+    Start-Sleep -Seconds 1
+}
+
+Write-Host ""
+
+if (-not $Choice) {
+    $Choice = '1'
+    Write-Host "No selection made. Defaulting to option 1." -ForegroundColor Yellow
+}
 
 switch ($Choice) {
     '1' {
