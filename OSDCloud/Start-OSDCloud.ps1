@@ -30,6 +30,25 @@ $Global:MyOSDCloud = [ordered]@{
     #OSVersionNames = @('Windows 11')
     BrandName = 'Valley Stream Central High School District'
 }
+#Set OSDCloudGUI Vars
+$OSDModuleResource.StartOSDCloudGUI = @{
+    BrandName              = 'Valley Stream Central High School District'
+
+    ClearDiskConfirm       = $true
+    restartComputer        = $true
+    captureScreenshots     = $false
+
+    updateDiskDrivers      = $true
+    updateFirmware         = $true
+    updateNetworkDrivers   = $true
+    updateSCSIDrivers      = $true
+    SyncMSUpCatDriverUSB   = $true
+
+    OEMActivation          = $true
+    WindowsUpdate          = $true
+    WindowsUpdateDrivers   = $true
+    WindowsDefenderUpdate  = $true
+}
 
 #Set BIOS Settings
 $Manufacturer = (Get-MyComputerManufacturer -Brief)
