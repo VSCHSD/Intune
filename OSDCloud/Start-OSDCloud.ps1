@@ -34,7 +34,12 @@ $Global:MyOSDCloud = [ordered]@{
 $OSDModuleResource.StartOSDCloudGUI = @{
     BrandName              = 'Valley Stream Central High School District'
 
-    ClearDiskConfirm       = $true
+    $OSName = 'Windows 11 25H2 x64'
+    $OSEdition = 'Pro'
+    $OSActivation = 'Retail'
+    $OSLanguage = 'en-us'
+
+    ClearDiskConfirm       = $false
     restartComputer        = $true
     captureScreenshots     = $false
 
