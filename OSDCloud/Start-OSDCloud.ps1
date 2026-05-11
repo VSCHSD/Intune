@@ -18,7 +18,6 @@ $Global:MyOSDCloud = [ordered]@{
 $OSDModuleResource.StartOSDCloudGUI = @{
     BrandName   = 'Valley Stream Central High School District'
 
-    OSName = $OSName
     OSEdition = $OSEdition
     OSActivation = $OSActivation
     OSLanguage = $OSLanguage
