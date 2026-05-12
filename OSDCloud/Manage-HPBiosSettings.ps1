@@ -458,11 +458,17 @@ if($SetSettings)
             Stop-Script -ErrorMessage "The specified setup password does not match the currently set password"
         }
     }
-    else
+    if($PasswordCheck -eq 0)
     {
+        if([String]::IsNullOrEmpty($SetupPassword))
+        {
+        Write-Output "Admin password not set and parameter not specified, not setting new password"
+        }
+        else{
         #Write-LogEntry -Value "The BIOS setup password is not currently set" -Severity 1
         $BIOS = Get-WmiObject -Namespace root/hp/InstrumentedBIOS -Class HP_BIOSSettingInterface
         $BIOS.SetBIOSSetting('Setup Password',"<utf-16/>" + $SetupPassword,"<utf-16/>")
+        }
     }
 }
 
