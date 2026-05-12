@@ -291,7 +291,7 @@ Function Set-HPBiosSetting {
     }
 }
 
-Function #Write-LogEntry
+Function Write-LogEntry
 {
     #Write data to a CMTrace compatible log file. (Credit to SCConfigMgr - https://www.scconfigmgr.com/)
 
