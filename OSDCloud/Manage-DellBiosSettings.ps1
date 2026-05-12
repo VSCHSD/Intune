@@ -604,10 +604,17 @@ if($SetSettings -or $SetDefaults -or $SetBootOrder)
             Stop-Script -ErrorMessage "The specified admin password does not match the currently set password"
         }
     }
-    else
+    if($AdminPasswordCheck -eq 0)
     {
-        #Write-LogEntry -Value "The admin password is not currently set. Setting" -Severity 1
+        #Admin password not set but parameter not specified
+        if([String]::IsNullOrEmpty($AdminPassword))
+        {
+        Write-Output "Admin password not set and parameter not specified, not setting new password"
+        }
+        else
+        {
         New-DellBiosPassword -PasswordType Admin -Password $AdminPassword
+        }
     }
 }
 
